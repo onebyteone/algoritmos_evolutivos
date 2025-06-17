@@ -30,18 +30,36 @@ def decodificar_cromosoma(cromosoma):
 
 def calcular_fitness(cromosoma):
     asignaciones = decodificar_cromosoma(cromosoma)
-    
+
     if any(len(asignaciones[ex]) != 13 for ex in ['A', 'B', 'C']):
         return -1000
-    
+
     promedios = {}
+    varianzas = {}
+    diversidad = 0
+
     for examen in ['A', 'B', 'C']:
         indices = asignaciones[examen]
         notas_examen = [notas[i] for i in indices]
+
         promedios[examen] = np.mean(notas_examen)
-    
-    desviacion = np.std(list(promedios.values()))
-    return -desviacion
+        varianzas[examen] = np.var(notas_examen)
+
+        categorias = set()
+        for nota in notas_examen:
+            if nota >= 15:
+                categorias.add('alta')
+            elif nota < 11:
+                categorias.add('baja')
+            else:
+                categorias.add('media')
+        diversidad += len(categorias) / 3
+
+    desv_promedios = np.std(list(promedios.values()))
+    promedio_varianzas = np.mean(list(varianzas.values()))
+
+    fitness = -desv_promedios - 0.1 * promedio_varianzas + 0.1 * diversidad
+    return fitness
 
 def mutacion(cromosoma):
     cromosoma_mutado = cromosoma.copy()
