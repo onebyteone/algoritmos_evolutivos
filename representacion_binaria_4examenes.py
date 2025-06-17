@@ -7,21 +7,24 @@ alumnos = df['Alumno'].tolist()
 notas = df['Nota'].tolist()
 
 def crear_cromosoma():
+    """Genera un cromosoma con 10 alumnos en A, B, C y 9 en D."""
+    asignaciones = ['A'] * 10 + ['B'] * 10 + ['C'] * 10 + ['D'] * 9
+    random.shuffle(asignaciones)
     cromosoma = []
-    for i in range(39):
-        examen = random.randint(0, 2)
-        genes = [0, 0, 0]
-        genes[examen] = 1
+    examenes = ['A', 'B', 'C', 'D']
+    for asignacion in asignaciones:
+        genes = [0, 0, 0, 0]
+        genes[examenes.index(asignacion)] = 1
         cromosoma.extend(genes)
     return cromosoma
 
 def decodificar_cromosoma(cromosoma):
-    asignaciones = {'A': [], 'B': [], 'C': []}
-    examenes = ['A', 'B', 'C']
+    asignaciones = {'A': [], 'B': [], 'C': [], 'D': []}
+    examenes = ['A', 'B', 'C', 'D']
     
     for i in range(39):
-        idx = i * 3
-        for j in range(3):
+        idx = i * 4
+        for j in range(4):
             if cromosoma[idx + j] == 1:
                 asignaciones[examenes[j]].append(i)
                 break
@@ -31,14 +34,17 @@ def decodificar_cromosoma(cromosoma):
 def calcular_fitness(cromosoma):
     asignaciones = decodificar_cromosoma(cromosoma)
 
-    if any(len(asignaciones[ex]) != 13 for ex in ['A', 'B', 'C']):
+    if (len(asignaciones['A']) != 10 or
+        len(asignaciones['B']) != 10 or
+        len(asignaciones['C']) != 10 or
+        len(asignaciones['D']) != 9):
         return -1000
 
     promedios = {}
     varianzas = {}
     diversidad = 0
 
-    for examen in ['A', 'B', 'C']:
+    for examen in ['A', 'B', 'C', 'D']:
         indices = asignaciones[examen]
         notas_examen = [notas[i] for i in indices]
 
@@ -67,17 +73,17 @@ def mutacion(cromosoma):
     alumno1 = random.randint(0, 38)
     alumno2 = random.randint(0, 38)
     
-    idx1 = alumno1 * 3
-    idx2 = alumno2 * 3
+    idx1 = alumno1 * 4
+    idx2 = alumno2 * 4
     
-    examen1 = [i for i in range(3) if cromosoma_mutado[idx1 + i] == 1][0]
-    examen2 = [i for i in range(3) if cromosoma_mutado[idx2 + i] == 1][0]
+    examen1 = [i for i in range(4) if cromosoma_mutado[idx1 + i] == 1][0]
+    examen2 = [i for i in range(4) if cromosoma_mutado[idx2 + i] == 1][0]
     
     if examen1 != examen2:
-        cromosoma_mutado[idx1:idx1+3] = [0, 0, 0]
+        cromosoma_mutado[idx1:idx1+4] = [0, 0, 0, 0]
         cromosoma_mutado[idx1 + examen2] = 1
-        
-        cromosoma_mutado[idx2:idx2+3] = [0, 0, 0]
+
+        cromosoma_mutado[idx2:idx2+4] = [0, 0, 0, 0]
         cromosoma_mutado[idx2 + examen1] = 1
     
     return cromosoma_mutado
@@ -109,16 +115,16 @@ def algoritmo_genetico(generaciones=100, tam_poblacion=50):
     mejor_cromosoma = fitness_scores[0][0]
     return mejor_cromosoma
 
-print("REPRESENTACIÓN BINARIA")
-print("Problema: Distribuir 39 alumnos en 3 exámenes (A, B, C) de forma equitativa")
-print("Cromosoma: 117 bits (39 alumnos × 3 bits cada uno)")
-print("Gen: [0,1,0] significa alumno asignado a examen B\n")
+print("REPRESENTACIÓN BINARIA - 4 EXÁMENES")
+print("Problema: Distribuir 39 alumnos en 4 exámenes (A, B, C, D)")
+print("Cromosoma: 156 bits (39 alumnos × 4 bits cada uno)")
+print("Gen: [0,1,0,0] significa alumno asignado a examen B\n")
 
 mejor_solucion = algoritmo_genetico()
 asignaciones_finales = decodificar_cromosoma(mejor_solucion)
 
 print("\nDistribución final:")
-for examen in ['A', 'B', 'C']:
+for examen in ['A', 'B', 'C', 'D']:
     indices = asignaciones_finales[examen]
     notas_examen = [notas[i] for i in indices]
     promedio = np.mean(notas_examen)
@@ -127,7 +133,7 @@ for examen in ['A', 'B', 'C']:
 
 print("\nVerificación de equilibrio:")
 promedios = []
-for examen in ['A', 'B', 'C']:
+for examen in ['A', 'B', 'C', 'D']:
     indices = asignaciones_finales[examen]
     notas_examen = [notas[i] for i in indices]
     promedios.append(np.mean(notas_examen))

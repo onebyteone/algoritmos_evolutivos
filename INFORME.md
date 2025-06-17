@@ -1,7 +1,3 @@
-# S08.s1 - Práctica: Representaciones Cromosómicas en Algoritmos Genéticos
-
-## FLORES LUERA, Miguel
-
 # Informe Final
 
 ## Objetivo del proyecto
