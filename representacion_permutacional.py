@@ -5,6 +5,7 @@ import pandas as pd
 df = pd.read_csv('notas_1u.csv')
 alumnos = df['Alumno'].tolist()
 notas = df['Nota'].tolist()
+alumnos_baja_nota = [i for i, n in enumerate(notas) if n < 11]
 
 def crear_cromosoma():
     indices = list(range(39))
@@ -21,6 +22,11 @@ def decodificar_cromosoma(cromosoma):
 
 def calcular_fitness(cromosoma):
     asignaciones = decodificar_cromosoma(cromosoma)
+
+    # Penaliza si todos los alumnos con nota < 11 están en el mismo examen
+    for examen in ['A', 'B', 'C']:
+        if set(alumnos_baja_nota).issubset(asignaciones[examen]):
+            return -1000
     
     promedios = {}
     for examen in ['A', 'B', 'C']:
