@@ -95,7 +95,21 @@ def mutacion(cromosoma):
     
     return cromosoma_mutado
 
-def algoritmo_genetico(generaciones=150, tam_poblacion=100):
+def mutacion_gaussiana(cromosoma, sigma=0.1):
+    """Aplica ruido gaussiano a cada tripleta de genes manteniendo la suma 1."""
+    cromosoma_mutado = cromosoma.copy()
+    for i in range(39):
+        idx = i * 3
+        genes = [max(0, g + random.gauss(0, sigma)) for g in cromosoma_mutado[idx:idx+3]]
+        suma = sum(genes)
+        if suma == 0:
+            genes = [1/3, 1/3, 1/3]
+        else:
+            genes = [g / suma for g in genes]
+        cromosoma_mutado[idx:idx+3] = genes
+    return cromosoma_mutado
+
+def algoritmo_genetico(generaciones=150, tam_poblacion=100, sigma_gauss=None):
     poblacion = [crear_cromosoma() for _ in range(tam_poblacion)]
     
     mejor_global_fitness = float('-inf')
@@ -120,7 +134,10 @@ def algoritmo_genetico(generaciones=150, tam_poblacion=100):
             padre2 = random.choice(poblacion[:tam_poblacion//4])[0] if isinstance(poblacion[0], tuple) else random.choice(poblacion[:tam_poblacion//4])
             
             hijo = cruce(padre1, padre2)
-            hijo = mutacion(hijo)
+            if sigma_gauss is None:
+                hijo = mutacion(hijo)
+            else:
+                hijo = mutacion_gaussiana(hijo, sigma=sigma_gauss)
             nueva_poblacion.append(hijo)
         
         poblacion = nueva_poblacion
@@ -135,7 +152,8 @@ print("Problema: Optimizar distribución de alumnos usando pesos probabilístico
 print("Cromosoma: 117 valores reales (39 alumnos × 3 pesos normalizados)")
 print("Gen: [0.2, 0.5, 0.3] representa probabilidades para exámenes A, B, C\n")
 
-mejor_solucion = algoritmo_genetico()
+# Usamos la nueva mutación gaussiana con sigma = 0.1
+mejor_solucion = algoritmo_genetico(sigma_gauss=0.1)
 asignaciones_finales = decodificar_cromosoma(mejor_solucion)
 
 print("\nDistribución optimizada:")
