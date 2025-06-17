@@ -109,6 +109,8 @@ El archivo `notas_1u.csv` contiene las notas de los 39 alumnos con su asignació
 1. Modifica uno de los programas para distribuir los alumnos en 4 exámenes
 2. ¿Qué cambios necesitas hacer en el cromosoma?
 3. ¿Cómo afecta esto a la convergencia del algoritmo?
+4. Puedes tomar como referencia `representacion_binaria_4examenes.py`, que
+   muestra una versión adaptada de la representación binaria para cuatro grupos.
 
 ## 📝 Flujo de Trabajo y Entregables para Estudiantes
 
