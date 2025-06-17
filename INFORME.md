@@ -18,6 +18,12 @@ El archivo `analisis.txt` resume la actividad comparativa entre las representaci
 - **Representación real**: alcanzó 13 alumnos por grupo con una desviación estándar aproximada de `0.036`. Su fitness mejoró hasta `-1.0911` y se estabilizó después de la generación 30.
 - **Representación permutacional**: también obtuvo 13 estudiantes por grupo y la misma desviación de `0.036`. Su fitness inicial fue `0.1187` y llegó rápidamente a `0.2637` en solo 10 generaciones.
 
+| Representación   | Alumnos por examen | Desviación estándar | Fitness final | Generaciones de convergencia |
+|------------------|-------------------|---------------------|--------------|------------------------------|
+| Binaria          | 9, 15 y 15        | ~0.30               | -1000        | No converge                  |
+| Real             | 13, 13 y 13       | ~0.036              | -1.0911      | ~30                          |
+| Permutacional    | 13, 13 y 13       | ~0.036              | 0.2637       | ~10                          |
+
 En la comparación general, la representación permutacional fue la que **convergió más rápido**, mientras que la representación real obtuvo resultados muy similares pero requirió más generaciones. La representación binaria fue la menos eficiente debido a las restricciones de tamaño de grupo.
 
 ## Conclusiones
