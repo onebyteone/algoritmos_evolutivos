@@ -1,0 +1,24 @@
+Actividad 1: Analisis Comparativo de Representaciones Cromosomicas
+===============================================================
+
+Se ejecutaron los tres programas incluidos en el repositorio para analizar su desempeño al distribuir a 39 alumnos en tres examenes. Los resultados de cada representacion se registraron en archivos de salida (`binaria.out`, `real.out` y `permutacional.out`).
+
+### Representacion Binaria
+- Los grupos generados no cumplen el equilibrio de 13 estudiantes cada uno. En una ejecucion tipica se obtuvieron 9, 15 y 15 alumnos por examen.
+- El fitness se mantuvo en `-1000` durante todas las generaciones, indicando violaciones a la restriccion de tamano de grupo.
+- Desviacion estandar entre promedios: aproximadamente `0.30`.
+
+### Representacion Real
+- Logro exactamente 13 alumnos por examen.
+- Desviacion estandar entre promedios: alrededor de `0.036`.
+- El fitness mejoro hasta `-1.0911` y se estabilizo a partir de la generacion 30.
+
+### Representacion Permutacional
+- Tambien alcanzo 13 alumnos por examen con una desviacion estandar de `0.036`.
+- El fitness inicial fue `0.1187` y llego a `0.2637` en solo 10 generaciones, manteniendose estable despues.
+
+### Comparacion
+- **Mejor equilibrio**: Tanto la representacion real como la permutacional alcanzan el mismo bajo nivel de desviacion, muy superior a la representacion binaria.
+- **Convergencia mas rapida**: La representacion permutacional estabilizo su fitness en menos de 10 generaciones, mientras que la real tardo al menos 30.
+
+En conclusion, para este problema la representacion binaria resulta ineficiente por las restricciones de tamano de grupo. La representacion permutacional convergio mas rapido, aunque la representacion real ofrece una interpretacion probabilistica interesante con resultados similares.
